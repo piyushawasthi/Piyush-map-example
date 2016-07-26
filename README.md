@@ -24,7 +24,7 @@ gem "rails-assets-underscore"
 Nothing simpler. To use geocoder you just have to pimp the model you want to geocode. Here
 
 ```ruby
-class Flat < ActiveRecord::Base
+class Restaurant < ActiveRecord::Base
   geocoded_by :address
   after_validation :geocode
 end
@@ -32,7 +32,7 @@ end
 
 It assumes you have a `restaurant` table with an `address` column of course.
 
-Then, whenever you create a Flat like `flat = Flat.create(name: "Charming Mansion in Montmartre", address: "12, impasse Marie-Blanche")` it will automatically compute and store this flat's latitude and longitude, accessible with `flat.latitude`, and `flat.longitude`. You can use these new accessors to create custom gmaps iframe, see for example our `views/restaurant/show.html.erb` view for instance.
+Then, whenever you create a Restaurant like `restaurant = Restaurant.create(name: "Charming Mansion in Montmartre", address: "12, impasse Marie-Blanche")` it will automatically compute and store this restaurant's latitude and longitude, accessible with `restaurant.latitude`, and `restaurant.longitude`. You can use these new accessors to create custom gmaps iframe, see for example our `views/restaurant/show.html.erb` view for instance.
 
 
 ### How gmaps4rails works ?
@@ -63,10 +63,10 @@ At the bottom of your `app/views/layouts/application.html.erb`, you need this:
 Then all the magic comes in the controller which prepares a hash of custom markers to pass to the template:
 
 ```ruby
-@hash = Gmaps4rails.build_markers(@restaurant) do |flat, marker|
-  marker.lat flat.latitude
-  marker.lng flat.longitude
-  marker.infowindow render_to_string(:partial => "/restaurant/map_box", locals: {flat: flat})
+@hash = Gmaps4rails.build_markers(@restaurant) do |restaurant, marker|
+  marker.lat restaurant.latitude
+  marker.lng restaurant.longitude
+  marker.infowindow render_to_string(:partial => "/restaurant/map_box", locals: {restaurant: restaurant})
 end
 
 ```
@@ -89,5 +89,5 @@ $(function(){
 </script>
 ```
 
-And we're done buddies!
+Thanks!
 
